@@ -6,6 +6,9 @@ import noImage from '../public/assets/close.png';
 import { useState } from 'react';
 import { resolve } from 'styled-jsx/css';
 import Link from 'next/link';
+import Slider from '/components/slider';
+import RangeSlider from '/components/RangeSlider';
+
 
 const dataEntry = () => {
     const [sliderValue, setSliderValue] = useState(50);
@@ -21,16 +24,20 @@ const dataEntry = () => {
     const [Phone, setPhone] = useState("");
     const [address, setaddress] = useState("");
     const [email, setemail] = useState("");
+    // const [maxValue, setMaxValue] = maxValueState;
+
+
 
     // const apikey = process.env.GMAP_API_KEY;
 
     // const mapApiJs = 'https://maps.googleapis.com/maps/api/js';
 
 
+
     // load google map api js
     const nextButtonClicked = () => {
         if (step == 0) {
-            setmonthlyBill(document.getElementById("range").value)
+            // setmonthlyBill(maxValue);
         }
 
 
@@ -77,16 +84,44 @@ const dataEntry = () => {
 
 
 
-            <div class="rounded-lg p-4 shadow-lg md:w-[70%] w-full " >
-                <div class="price-range p-4">
-                    <span class="text-xl">$</span>
-                    {sliderValue !== null ? <span class="text-xl">{sliderValue}</span> : <span class="text-lg">$300</span>}
-                    <input id="range" class="w-full accent-blue-500" type="range" defaultValue={sliderValue} min="0" max="1000" onChange={(e) => setSliderValue(e.target.value)} />
+            <div className="rounded-lg p-4 shadow-lg md:w-[70%] w-full " >
+                <RangeSlider
+                    intialMin={250}
+                    initialMax={750}
+                    min={0}
+                    max={1000}
+                    step={1}
+                    priceCap={100}
+
+
+                />
+                {/* <div className="price-range p-4 ">
+                    <div className='relative'>
+
+                        {sliderValue !== null ? <span class="text-xl">{sliderValue}</span> : <span class="text-lg">$300</span>}
+
+
+                    </div> */}
+                {/* <input type="range" min="0" max="1000" id="range" defaultValue={sliderValue} className="w-full accent-blue-500" /> */}
+
+
+                {/* <input
+                        type="range"
+                        min="0"
+                        max="1000"
+                        onChange={(e) => setSliderValue(parseInt(e.target.value))}
+                        className="w-full appearance-none bg-gray-400 outline-none focus:outline-none focus:shadow-outline"
+                    />
+
+
+
                     <div class="-mt-2 flex w-full justify-between">
                         <span class="text-sm text-gray-600">0</span>
+                        <span class="text-sm text-gray-600">500</span>
                         <span class="text-sm text-gray-600">1000</span>
-                    </div>
-                </div>
+                    </div> */}
+                {/* <Slider /> */}
+                {/* </div> */}
             </div>
 
         </div>
@@ -110,6 +145,7 @@ const dataEntry = () => {
 
                         setIsActive(!isActive)
                         setIsActive2(false)
+                        setStep(step + 1);
 
                         setHomeOwner("yes")
                     }}
@@ -131,6 +167,7 @@ const dataEntry = () => {
                     onClick={() => {
                         setIsActive2(!isActive2)
                         setIsActive(false)
+                        setStep(step + 1);
 
                         setHomeOwner("No")
                     }}
@@ -169,6 +206,7 @@ const dataEntry = () => {
                         setIsActive3(!isActive3)
                         setIsActive4(false)
                         setCreditScoreAbove("yes")
+                        setStep(step + 1);
                     }}
                 >
                     <div className=' h-auto p-5 cursor-pointer '>
@@ -189,6 +227,7 @@ const dataEntry = () => {
                         setIsActive4(!isActive4)
                         setIsActive3(false)
                         setCreditScoreAbove("no")
+                        setStep(step + 1);
                     }}
                 >
                     <div className=' h-auto md:p-10 p-6'>

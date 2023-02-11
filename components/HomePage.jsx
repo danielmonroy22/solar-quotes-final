@@ -19,7 +19,8 @@ import Image from "next/image";
 
 export default function Home() {
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: process.env.GOOGLE_API_KEY,
+
+        googleMapsApiKey: "AIzaSyCqe6iGhufrKU25NUftIIm5yuuV_qi_tqs",
         libraries: ["places"],
     });
 

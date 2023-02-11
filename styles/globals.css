@@ -23,3 +23,37 @@ input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   @apply bg-blue-500
 }
+
+.places-container {
+  background-color: blue;
+  height: 50px;
+  width: 60%;
+  padding-top: 10px;
+
+
+}
+
+.map-container {
+  width: 100%;
+  height: 50vh;
+
+
+}
+
+.combobox-input {
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.divPrimary {
+  display: flex;
+  flex-direction: column;
+
+
+
+
+
+
+  justify-content: center;
+
+}

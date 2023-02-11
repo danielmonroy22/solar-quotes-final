@@ -8,6 +8,23 @@ import { resolve } from 'styled-jsx/css';
 import Link from 'next/link';
 import Slider from '/components/slider';
 import RangeSlider from '/components/RangeSlider';
+import { useMemo } from "react";
+import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
+import Router from 'next/router';
+import { useRouter } from 'next/router';
+import usePlacesAutocomplete, {
+    getGeocode,
+    getLatLng,
+} from "use-places-autocomplete";
+import {
+    Combobox,
+    ComboboxInput,
+    ComboboxPopover,
+    ComboboxList,
+    ComboboxOption,
+} from "@reach/combobox";
+import "@reach/combobox/styles.css";
+import { useSearchParams } from 'next/navigation'
 
 
 const dataEntry = () => {
@@ -24,6 +41,54 @@ const dataEntry = () => {
     const [Phone, setPhone] = useState("");
     const [address, setaddress] = useState("");
     const [email, setemail] = useState("");
+    const searchParams = useSearchParams();
+
+
+
+
+
+
+
+
+    function Map() {
+        const router = useRouter();
+        const data = router.query;
+
+
+
+
+        const center = ({ lat: data.lat, lng: data.lng })
+        console.log(data.lat);
+
+
+        return (
+            <>
+                <div className="divPrimary w-full">
+
+
+                    {/* <div className="bg-gray-50 border border-gray-300 w-full rounded " >
+                        <PlacesAutocomplete setSelected={setSelected} />
+                    </div> */}
+
+                    <GoogleMap
+                        zoom={100}
+                        center={data}
+                        mapContainerClassName="map-container"
+                        position={data}
+                        mapTypeId="satellite"
+
+
+
+
+                    >
+                        {/* {data && <Marker position={data} />} */}
+                        <Marker position={center} />
+                    </GoogleMap>
+                </div>
+                {/* <GoogleMap bootstrapURLKeys={{ key: "AIzaSyCqe6iGhufrKU25NUftIIm5yuuV_qi_tqs" }} defaultCenter={this.props.center} defaultZoom={this.props.zoom} options={function (maps) { return { mapTypeId: "satellite" } }} > </GoogleMap> */}
+            </>
+        );
+    }
     // const [maxValue, setMaxValue] = maxValueState;
 
 
@@ -75,6 +140,7 @@ const dataEntry = () => {
 
     /** Group the person input fields in a component */
     const PersonFields = () => (
+
         <div className='flex flex-col items-center '>
             <div className='md:py-10 font-semibold w-full h-auto text-center md:text-3xl text-2xl'>
                 Current Monthly Power Bill
@@ -85,7 +151,8 @@ const dataEntry = () => {
 
 
             <div className="rounded-lg p-4 shadow-lg md:w-[70%] w-full " >
-                <RangeSlider
+                <Map />
+                {/* <RangeSlider
                     intialMin={250}
                     initialMax={750}
                     min={0}
@@ -94,7 +161,8 @@ const dataEntry = () => {
                     priceCap={100}
 
 
-                />
+                /> */}
+
                 {/* <div className="price-range p-4 ">
                     <div className='relative'>
 
@@ -333,14 +401,17 @@ const dataEntry = () => {
     const [step, setStep] = useState(0)
 
     const fieldGroups = [
-        <PersonFields />,
-        <ContactFields />,
-        <CreditScore />,
+
         <AddressFields />
     ]
+    // const { isLoaded } = useLoadScript({
+    //     googleMapsApiKey: process.env.GOOGLE_API_KEY,
+    //     libraries: ["places"],
+    // });
 
     return (
         <>
+
 
 
 

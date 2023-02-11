@@ -3,6 +3,23 @@ import React from 'react'
 import Link from 'next/link';
 import { useState } from 'react';
 import Image from 'next/image';
+import { useMemo } from "react";
+import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
+import usePlacesAutocomplete, {
+    getGeocode,
+    getLatLng,
+} from "use-places-autocomplete";
+import {
+    Combobox,
+    ComboboxInput,
+    ComboboxPopover,
+    ComboboxList,
+    ComboboxOption,
+} from "@reach/combobox";
+import "@reach/combobox/styles.css";
+
+
+// import "@reach/combobox/styles.css";
 
 
 
@@ -23,14 +40,123 @@ import Image from 'next/image';
 // `;
 
 const HomePage = () => {
-    const [error, setError] = useState("please enter Zip Code")
+    const [error, setError] = useState("please enter Address")
+    const [info, setinfo] = useState(null);
+    const selected2 = ({ lat: 77.6405, lng: -165.8389 });
+
+
+
+    function Map() {
+        const center = useMemo(() => ({ lat: 33.6405, lng: -117.8389 }), []);
+        const [selected, setSelected] = useState(null);
+
+
+
+
+
+        return (
+            <>
+                <div className="divPrimary w-full">
+                    <div className='pb-2'>
+                        <label >Address</label>
+                    </div>
+
+
+                    <div className="bg-gray-50 border border-gray-300 w-full rounded " >
+                        <PlacesAutocomplete setSelected={setSelected} />
+                    </div>
+
+                    <div className={selected ? `flex flex-col min-h-[50vh] w-full` : `hidden`}>
+                        <h1 className='py-5 text-3xl font-semibold'> Is this Your Roof?</h1>
+
+
+                        <GoogleMap
+                            zoom={150}
+                            center={selected}
+                            mapContainerClassName="map-container"
+                            position={selected}
+                            mapTypeId="satellite"
+
+
+
+
+                        >
+                            {selected && <Marker position={selected} />}
+                            {/* {selected && <div className='flex absolute bottom-0 w-full bg-blue-500 items-center justify-center py-5 text-white'> yes this is my roof</div>} */}
+                        </GoogleMap>
+                    </div>
+                    <div className="flex justify-end pt-10  opacity-100">
+                        <Link
+                            href={{
+                                pathname: "/dataEntry"
+
+
+                            }}
+                            className=' w-full py-5 text-center text-white font-semibold bg-red-500 rounded'>
+                            <button type='button' >{selected ? "Yes this is my roof" : "FREE QUOTE"} </button>
+                        </Link>
+
+                    </div>
+
+
+
+
+                </div>
+                {/* <GoogleMap bootstrapURLKeys={{ key: "AIzaSyCqe6iGhufrKU25NUftIIm5yuuV_qi_tqs" }} defaultCenter={this.props.center} defaultZoom={this.props.zoom} options={function (maps) { return { mapTypeId: "satellite" } }} > </GoogleMap> */}
+            </>
+        );
+
+    }
+
+
+    const PlacesAutocomplete = ({ setSelected }) => {
+        const {
+            ready,
+            value,
+            setValue,
+            suggestions: { status, data },
+            clearSuggestions,
+        } = usePlacesAutocomplete();
+
+        const handleSelect = async (address) => {
+            setValue(address, false);
+            clearSuggestions();
+
+            const results = await getGeocode({ address });
+            const { lat, lng } = await getLatLng(results[0]);
+            setSelected({ lat, lng });
+
+
+
+        };
+
+        return (
+            <Combobox onSelect={handleSelect}>
+                <ComboboxInput
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+
+                    className="combobox-input"
+                    placeholder="Search an address"
+                />
+                <ComboboxPopover>
+                    <ComboboxList>
+                        {status === "OK" &&
+                            data.map(({ place_id, description }) => (
+                                <ComboboxOption key={place_id} value={description} />
+                            ))}
+                    </ComboboxList>
+                </ComboboxPopover>
+            </Combobox>
+        );
+    };
 
     const handleInputChange = (event) => {
         event.persist();
-        const zipCode = document.getElementById("zipcode").value;
+        // const zipCode = document.getElementById("zipcode").value;
 
-        if (!zipCode) {
-            setError("please enter Zip Code")
+        if (!value) {
+            setError("please enter Address")
             // if (!lastName) {
             //     setError2(null)
 
@@ -51,6 +177,10 @@ const HomePage = () => {
 
 
     };
+    const { isLoaded } = useLoadScript({
+        googleMapsApiKey: process.env.GOOGLE_API_KEY,
+        libraries: ["places"],
+    });
     return (
         <>
 
@@ -82,31 +212,24 @@ const HomePage = () => {
                             <p className='text-white pt-5 font-medium'>Enter Your Zip Code - Get Qualified Instantly. Compare Quotes. No Cost & No Obligation.</p>
                         </div>
                     </div>
-                    <div className='md:flex-1   w-100 h-100 flex justify-start md:pt-20 md:px-10 px-5'>
+                    <div className='md:flex-1 md:py-44   w-100 h-100 flex justify-start md:pt-20 md:px-10 px-5'>
 
-                        <div className=' bg-white md:h-[60%] h-full md:w-[70%] w-full rounded-3xl p-10'>
+                        <div className=' bg-white h-full md:w-[70%] w-full rounded-3xl p-10'>
                             <p className='md:px-10 font-medium'>See if you qualify for incentives in your area and get solar with zero upfront costs!</p>
                             <div className='w-full flex  justify-start md:px-10 pt-5 md:pt-0 '>
-                                <div className='flex-row md:pt-5  w-full'>
-                                    <div className='pb-2'>
-                                        <label >Zip Code</label>
-                                    </div>
+                                <div className='flex-row md:pt-5 h-full  w-full'>
 
-                                    <input id='zipcode' type="number" class="bg-gray-50 border border-gray-300 w-full rounded p-2" onChange={handleInputChange} placeholder="ZIP CODE" required />
-                                    {error ? <label className=' text-red-500 '>{error}</label> : ""}
+
+                                    {/* <input id='zipcode' type="number" class="bg-gray-50 border border-gray-300 w-full rounded p-2" onChange={handleInputChange} placeholder="ZIP CODE" required /> */}
+                                    <Map />
+
 
                                 </div>
 
 
                             </div>
-                            <div className={error ? `flex justify-end pt-10 px-10 opacity-50 ` : `flex justify-end pt-10 px-10 opacity-100`}>
-                                {error ? <Link href="/" className=' w-full py-5 text-center text-white font-semibold bg-red-500 rounded'>
-                                    <button type='button' >FREE QUOTE</button>
-                                </Link> : <Link href="/dataEntry" className=' w-full py-5 text-center text-white font-semibold bg-red-500 rounded'>
-                                    <button type='button' >FREE QUOTE</button>
-                                </Link>}
 
-                            </div>
+
 
                         </div>
 

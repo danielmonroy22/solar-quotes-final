@@ -24,7 +24,7 @@ export default function Home() {
         libraries: ["places"],
     });
 
-    if (!isLoaded) return <div>Loading...</div>;
+    if (!isLoaded) return <div>Soading...</div>;
     return <Map />;
 }
 

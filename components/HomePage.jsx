@@ -18,13 +18,13 @@ import Image from "next/image";
 
 
 export default function Home() {
-    // const { isLoaded } = useLoadScript({
+    const { isLoaded } = useLoadScript({
 
-    //     googleMapsApiKey: "AIzaSyCqe6iGhufrKU25NUftIIm5yuuV_qi_tqs",
-    //     libraries: ["places"],
-    // });
+        googleMapsApiKey: "AIzaSyCqe6iGhufrKU25NUftIIm5yuuV_qi_tqs",
+        libraries: ["places"],
+    });
 
-    // if (!isLoaded) return <div>Loading...</div>;
+    if (!isLoaded) return <div>Loading...</div>;
     return <Map />;
 }
 
@@ -71,7 +71,7 @@ function Map() {
                                         <div className="bg-gray-50 border border-gray-300 w-full rounded " >
                                             <PlacesAutocomplete setSelected={setSelected} />
                                         </div>
-                                        {/* 
+
                                         <div className={selected ? `flex flex-col min-h-[50vh] w-full` : `hidden`}>
                                             <h1 className='py-5 text-3xl font-semibold'> Is this Your Roof?</h1>
 
@@ -86,15 +86,17 @@ function Map() {
 
 
 
-                                            > */}
-                                        {/* {selected && <Marker position={selected} />} */}
-                                        {/* {selected && <div className='flex absolute bottom-0 w-full bg-blue-500 items-center justify-center py-5 text-white'> yes this is my roof</div>} */}
-                                        {/* </GoogleMap>
-                                        </div> */}
+                                            >
+                                                {selected && <Marker position={selected} />}
+                                                {/* {selected && <div className='flex absolute bottom-0 w-full bg-blue-500 items-center justify-center py-5 text-white'> yes this is my roof</div>} */}
+                                            </GoogleMap>
+                                        </div>
                                         <div className="flex justify-end pt-10  opacity-100">
+                                            <Link href="/dataEntry" className="w-full py-5 text-center text-white font-semibold bg-red-500 rounded">
 
 
-                                            <button className="w-full py-5 text-center text-white font-semibold bg-red-500 rounded" type='button' >{selected ? "Yes this is my roof" : "FREE QUOTE"} </button>
+                                                <button type='button' >{selected ? "Yes this is my roof" : "FREE QUOTE"} </button>
+                                            </Link>
 
 
                                         </div>

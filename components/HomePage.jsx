@@ -1,8 +1,3 @@
-import React from 'react'
-
-import Link from 'next/link';
-import { useState } from 'react';
-import Image from 'next/image';
 import { useMemo } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import usePlacesAutocomplete, {
@@ -17,191 +12,36 @@ import {
     ComboboxOption,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 
-// import "@reach/combobox/styles.css";
-
-
-
-
-
-
-
-
-
-
-// const MyDiv = styled.div`
-//     background-image: url(${bg.src});
-
-
-
-
-
-// `;
-
-const HomePage = () => {
-    const [error, setError] = useState("please enter Address")
-    const [info, setinfo] = useState(null);
-    const selected2 = ({ lat: 77.6405, lng: -165.8389 });
-
-
-
-    function Map() {
-        const center = useMemo(() => ({ lat: 33.6405, lng: -117.8389 }), []);
-        const [selected, setSelected] = useState(null);
-
-
-
-
-
-        return (
-            <>
-                <div className="divPrimary w-full">
-                    <div className='pb-2'>
-                        <label >Address</label>
-                    </div>
-
-
-                    <div className="bg-gray-50 border border-gray-300 w-full rounded " >
-                        <PlacesAutocomplete setSelected={setSelected} />
-                    </div>
-
-                    <div className={selected ? `flex flex-col min-h-[50vh] w-full` : `hidden`}>
-                        <h1 className='py-5 text-3xl font-semibold'> Is this Your Roof?</h1>
-
-
-                        <GoogleMap
-                            zoom={150}
-                            center={selected}
-                            mapContainerClassName="map-container"
-                            position={selected}
-                            mapTypeId="satellite"
-
-
-
-
-                        >
-                            {selected && <Marker position={selected} />}
-                            {/* {selected && <div className='flex absolute bottom-0 w-full bg-blue-500 items-center justify-center py-5 text-white'> yes this is my roof</div>} */}
-                        </GoogleMap>
-                    </div>
-                    <div className="flex justify-end pt-10  opacity-100">
-                        <Link
-                            href={{
-                                pathname: "/dataEntry"
-
-
-                            }}
-                            className=' w-full py-5 text-center text-white font-semibold bg-red-500 rounded'>
-                            <button type='button' >{selected ? "Yes this is my roof" : "FREE QUOTE"} </button>
-                        </Link>
-
-                    </div>
-
-
-
-
-                </div>
-                {/* <GoogleMap bootstrapURLKeys={{ key: "AIzaSyCqe6iGhufrKU25NUftIIm5yuuV_qi_tqs" }} defaultCenter={this.props.center} defaultZoom={this.props.zoom} options={function (maps) { return { mapTypeId: "satellite" } }} > </GoogleMap> */}
-            </>
-        );
-
-    }
-
-
-    const PlacesAutocomplete = ({ setSelected }) => {
-        const {
-            ready,
-            value,
-            setValue,
-            suggestions: { status, data },
-            clearSuggestions,
-        } = usePlacesAutocomplete();
-
-        const handleSelect = async (address) => {
-            setValue(address, false);
-            clearSuggestions();
-
-            const results = await getGeocode({ address });
-            const { lat, lng } = await getLatLng(results[0]);
-            setSelected({ lat, lng });
-
-
-
-        };
-
-        return (
-            <Combobox onSelect={handleSelect}>
-                <ComboboxInput
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-
-                    className="combobox-input"
-                    placeholder="Search an address"
-                />
-                <ComboboxPopover>
-                    <ComboboxList>
-                        {status === "OK" &&
-                            data.map(({ place_id, description }) => (
-                                <ComboboxOption key={place_id} value={description} />
-                            ))}
-                    </ComboboxList>
-                </ComboboxPopover>
-            </Combobox>
-        );
-    };
-
-    const handleInputChange = (event) => {
-        event.persist();
-        // const zipCode = document.getElementById("zipcode").value;
-
-        if (!value) {
-            setError("please enter Address")
-            // if (!lastName) {
-            //     setError2(null)
-
-            // }
-
-
-
-
-        }
-
-
-        else {
-            setError(null);
-
-
-        }
-
-
-
-    };
+export default function Home() {
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.GOOGLE_API_KEY,
         libraries: ["places"],
     });
+
+    if (!isLoaded) return <div>Loading...</div>;
+    return <Map />;
+}
+
+function Map() {
+    const center = useMemo(() => ({ lat: 33.6405, lng: -117.8389 }), []);
+    const [selected, setSelected] = useState(null);
+
+
     return (
         <>
-
-
-
-
             <div className='min-h-screen shadow-xl mainDiv bg-cover bg-center bg-no-repeat md:bg-cover ' style={{ backgroundImage: "url('../assets/HomePage1.jpg')" }} >
 
-                {/* <Image
-                className='z-[-1]'
-                src={bg}
-                alt="Pexels"
-                layout='fill'
-                objectFit='cover'
-                objectPosition='center'
-            /> */}
                 <Link href='/'>
                     <div className='text-white  font-bold text-3xl w-full flex justify-center py-10'>
                         <Image src="/assets/Logo.png" width="400" height="300" alt='logo' className='px-10 md:px-0' />
                     </div>
                 </Link>
+
                 <div className='min-h-screen w-full gap-10 md:gap-0  flex flex-col md:flex-row '   >
 
 
@@ -221,7 +61,47 @@ const HomePage = () => {
 
 
                                     {/* <input id='zipcode' type="number" class="bg-gray-50 border border-gray-300 w-full rounded p-2" onChange={handleInputChange} placeholder="ZIP CODE" required /> */}
-                                    <Map />
+                                    <div className="divPrimary w-full">
+                                        <div className='pb-2'>
+                                            <label >Address</label>
+                                        </div>
+
+
+                                        <div className="bg-gray-50 border border-gray-300 w-full rounded " >
+                                            <PlacesAutocomplete setSelected={setSelected} />
+                                        </div>
+
+                                        <div className={selected ? `flex flex-col min-h-[50vh] w-full` : `hidden`}>
+                                            <h1 className='py-5 text-3xl font-semibold'> Is this Your Roof?</h1>
+
+
+                                            <GoogleMap
+                                                zoom={150}
+                                                center={selected}
+                                                mapContainerClassName="map-container"
+                                                position={selected}
+                                                mapTypeId="satellite"
+
+
+
+
+                                            >
+                                                {selected && <Marker position={selected} />}
+                                                {/* {selected && <div className='flex absolute bottom-0 w-full bg-blue-500 items-center justify-center py-5 text-white'> yes this is my roof</div>} */}
+                                            </GoogleMap>
+                                        </div>
+                                        <div className="flex justify-end pt-10  opacity-100">
+
+
+                                            <button className="w-full py-5 text-center text-white font-semibold bg-red-500 rounded" type='button' >{selected ? "Yes this is my roof" : "FREE QUOTE"} </button>
+
+
+                                        </div>
+
+
+
+
+                                    </div>
 
 
                                 </div>
@@ -242,14 +122,48 @@ const HomePage = () => {
 
 
             </div >
+            {/* <GoogleMap bootstrapURLKeys={{ key: "AIzaSyCqe6iGhufrKU25NUftIIm5yuuV_qi_tqs" }} defaultCenter={this.props.center} defaultZoom={this.props.zoom} options={function (maps) { return { mapTypeId: "satellite" } }} > </GoogleMap> */}
         </>
-
-
-
-
-
-
-    )
+    );
 }
 
-export default HomePage
+const PlacesAutocomplete = ({ setSelected }) => {
+    const {
+        ready,
+        value,
+        setValue,
+        suggestions: { status, data },
+        clearSuggestions,
+    } = usePlacesAutocomplete();
+
+    const handleSelect = async (address) => {
+        setValue(address, false);
+        clearSuggestions();
+
+        const results = await getGeocode({ address });
+        const { lat, lng } = await getLatLng(results[0]);
+        setSelected({ lat, lng });
+    };
+
+    return (
+        <Combobox onSelect={handleSelect}>
+            <ComboboxInput
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+
+                className="combobox-input"
+                placeholder="Search an address"
+            />
+            <ComboboxPopover>
+                <ComboboxList>
+                    {status === "OK" &&
+                        data.map(({ place_id, description }) => (
+                            <ComboboxOption key={place_id} value={description} />
+                        ))}
+                </ComboboxList>
+            </ComboboxPopover>
+        </Combobox>
+    );
+};
+
+

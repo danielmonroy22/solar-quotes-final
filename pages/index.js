@@ -23,7 +23,7 @@ export default function Home() {
         </Helmet>
 
         <meta name="robots" content="all" />
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqe6iGhufrKU25NUftIIm5yuuV_qi_tqs&libraries=places"></script>
+
 
       </Head>
       <main>

@@ -20,7 +20,7 @@ import Image from "next/image";
 export default function Home() {
     const { isLoaded } = useLoadScript({
 
-        googleMapsApiKey: "AIzaSyCqe6iGhufrKU25NUftIIm5yuuV_qi_tqs",
+        googleMapsApiKey: "AIzaSyD9pYt4LAs06beTGW7zXS-DXGeVxje5P0A",
         libraries: ["places"],
     });
 
@@ -39,7 +39,7 @@ function Map() {
 
                 <Link href='/'>
                     <div className='text-white  font-bold text-3xl w-full flex justify-center py-10'>
-                        <Image src="/assets/Logo.png" width="400" height="300" alt='logo' className='px-10 md:px-0' />
+                        <Image src="/assets/Logo.png" width="400" height="300" alt='logo' className='px-10 md:px-0' priority />
                     </div>
                 </Link>
 

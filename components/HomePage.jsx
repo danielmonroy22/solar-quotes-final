@@ -18,10 +18,12 @@ import Image from "next/image";
 
 
 export default function Home() {
+    const libraries = useMemo(() => ['places'], []);
+
     const { isLoaded } = useLoadScript({
 
         googleMapsApiKey: "AIzaSyD9pYt4LAs06beTGW7zXS-DXGeVxje5P0A",
-        libraries: ["places"],
+        libraries: libraries,
     });
 
     if (!isLoaded) return <div>Loading...</div>;
